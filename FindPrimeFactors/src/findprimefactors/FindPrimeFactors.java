@@ -18,13 +18,12 @@ public class FindPrimeFactors {
     static long p = 0;
     static long q = 0;
     static long e = 0;
+    static long ePrivateKey = 0;
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
-        
-        // take argument to assign n and message attributes
         for(String argument : args) {
             if(n == 0) n = Long.parseLong(argument);
             else message = argument;
@@ -41,18 +40,19 @@ public class FindPrimeFactors {
         System.out.println("q is: " + q);
         System.out.println("e is: " + e);      
         
-        encryptAndPrintMessage(message.toLowerCase(), e, n);
+        System.out.println(encryptAndPrintMessage(message.toLowerCase(), e, n)); 
         
+        ePrivateKey = calculatePrivateKey(e, p, q);
+        System.out.println("privatekey: " + p*q + ", " + ePrivateKey);
         System.out.println("\nAmount of time busy encoding was: ");
         
+        System.out.println("first decryption of message: " + (((long)Math.pow(631, ePrivateKey) % n) % n));
 
         //optional bereken private key               
     }
     
     /**
      * Find P and Q for an given N
-     * @param n number that consists of two prime factors 
-     * @return key value pair with P and Q
      */
     public static HashMap<Integer, Integer> FindPQ(long n) {
         HashMap<Integer, Integer>  PQ = new HashMap();
@@ -75,51 +75,60 @@ public class FindPrimeFactors {
     }
     
     /**
-     * Find largest e between range 1 and z
+     * Find largest e between range 1 and 14
      */
     public static long FindE(long p, long q) {
         long e = 0;
         long z = (p-1)*(q-1);
         
-        // loop through 1 to z and reduce possibilities by modulo z through current i
-        for(long i = 1; i < z; i++) {
-            
-            //if z is dividible by i then we can optimize by skipping i
-            if(z%i==0) {
-                // skip current element in for loop
-                continue; 
-            }
+        // loop through 1 to 14, because bigger numbers need bigger datastructure than long
+        //also it doenst make much sense sich we are using static encoding(number per letter) anyway
+        for(long i = 1; i < 13; i++) {
+            //if zis dividible by i, then i is always the greatest common divider
+            if(z%i!=0) { 
                 
-            // loop through reduced set and check for GCD start checking at 2 as 1 and 0 always work
-            boolean hasCommonDivider = false;
-            for(int j = 2; j <= i; j++) {
-                // If GCD has modulo 0 set hasCommonDivider and stop loop
-                if(z%j==0 && i%j==0) {
-                    hasCommonDivider = true;
-                    break;
+                // loop through reduced set and check for GCD start checking at 2 as 1 and 0 always work
+                boolean hasCommonDivider = false;
+                for(int j = 2; j <= i; j++) {
+                    
+                    // If GCD has modulo 0 set hasCommonDivider and stop loop
+                    if(z%j==0 && i%j==0) {
+                        hasCommonDivider = true;
+                        break;
+                    }
+                }
+                
+                // dit not have commonDivider we found a possible e
+                // take large e for added complexity
+                if(!hasCommonDivider) {
+                    e = i;
                 }
             }
-                
-            // dit not have commonDivider we found a possible e
-            // take large e for added complexity
-            if(!hasCommonDivider) {
-                e = i;
-            }
         }
-        // Return the largest found e between 1 and z
         return e;
     }
     
-    public static void encryptAndPrintMessage(String stringToEncrypt, long publicKeye, long publicKeyN){
+    public static String encryptAndPrintMessage(String stringToEncrypt, long publicKeye, long publicKeyN){
         System.out.print("Message after encryption is: ");
         long letterCode = 0;
         long letterEncrypted = 0;
+        String message = "";
         for (char letter : stringToEncrypt.toCharArray()) {
-            letterCode = (int)letter - 97;
-            letterEncrypted = (int) Math.pow(letterCode, publicKeye);
+            letterCode = (long)letter - 95;
+            letterEncrypted = (long) Math.pow(letterCode, publicKeye);
             letterEncrypted = letterEncrypted % publicKeyN;
-            System.out.print(letterEncrypted + ",");
+            message += letterEncrypted + ", ";
         }  
+        return message;
+    }
+    
+    public static long calculatePrivateKey(long e, long p, long q){
+        for(long x = 0; x<(Long.MAX_VALUE); x++){
+            if((e*x) % ((p-1)*(q-1)) == 1){
+                return x;
+            }
+        }
+        return -1;
     }
 }
 
