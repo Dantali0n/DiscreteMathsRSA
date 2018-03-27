@@ -27,7 +27,7 @@ public class FindPrimeFactors {
         for(String argument : args) {
             if(n == 0) n = Long.parseLong(argument);
             else message = argument;
-        }       
+        }     
         
         for (Map.Entry<Integer, Integer> entry : FindPQ(n).entrySet()) {
             p = entry.getKey();
@@ -124,7 +124,7 @@ public class FindPrimeFactors {
     
     public static long calculatePrivateKey(long e, long p, long q){
         for(long x = 0; x<(Long.MAX_VALUE); x++){
-            if((e*x) % ((p-1)*(q-1)) == 1){
+            if(((e*x) % ((p-1)*(q-1))) == 1){
                 return x;
             }
         }
