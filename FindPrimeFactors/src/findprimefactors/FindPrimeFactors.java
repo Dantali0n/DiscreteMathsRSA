@@ -7,6 +7,9 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/** sudo apt install openjfx openjfx-source **/
+import javafx.util.Pair;
+
 /**
  * Finds the prime factors of an integer
  * @author Geoffrey van Driessel
@@ -29,10 +32,10 @@ public class FindPrimeFactors {
             else message = argument;
         }     
         
-        for (Map.Entry<Integer, Integer> entry : FindPQ(n).entrySet()) {
-            p = entry.getKey();
-            q = entry.getValue();
-        }
+        Pair<Integer, Integer> pq = FindPQ(n);
+        
+        p = pq.getKey();
+        q = pq.getValue();
         
         e = FindE(p, q);
         
@@ -54,8 +57,8 @@ public class FindPrimeFactors {
     /**
      * Find P and Q for an given N
      */
-    public static HashMap<Integer, Integer> FindPQ(long n) {
-        HashMap<Integer, Integer>  PQ = new HashMap();
+    public static Pair<Integer, Integer> FindPQ(long n) {
+        Pair<Integer, Integer>  PQ = new Pair(0, 0);
         int p = 0;
         int q = 0;
         int i= 2;
