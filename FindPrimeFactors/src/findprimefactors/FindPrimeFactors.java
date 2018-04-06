@@ -4,6 +4,7 @@
 package findprimefactors;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -122,9 +123,12 @@ public class FindPrimeFactors {
         return message;
     }
     
-    public static long calculatePrivateKey(long e, long p, long q){
-        for(long x = 0; x<(Long.MAX_VALUE); x++){
-            if(((e*x) % ((p-1)*(q-1))) == 1){
+    public static BigInteger calculatePrivateKey(long e, long p, long q){
+        BigInteger e2 = BigInteger.valueOf(e);
+        BigInteger p2 = BigInteger.valueOf(p);
+        BigInteger q2 = BigInteger.valueOf(q);
+        for(BigInteger x = BigInteger.ONE; x.compareTo(BigInteger.valueOf(Long.MAX_VALUE)); x.add(BigInteger.ONE)){
+            if(((e2*BigInteger.valueOf(x) % ((p-1)*(q-1))) == 1){
                 return x;
             }
         }
