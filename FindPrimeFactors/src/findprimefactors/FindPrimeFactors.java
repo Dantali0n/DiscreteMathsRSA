@@ -4,6 +4,7 @@
 package findprimefactors;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ public class FindPrimeFactors {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
+        BigInteger bi1, bi2;
         for(String argument : args) {
             if(n == 0) n = Long.parseLong(argument);
             else message = argument;
@@ -46,8 +48,11 @@ public class FindPrimeFactors {
         System.out.println("privatekey: " + p*q + ", " + ePrivateKey);
         System.out.println("\nAmount of time busy encoding was: ");
         
-        System.out.println("first decryption of message: " + (((long)Math.pow(631, ePrivateKey) % n) % n));
-
+        
+        bi1 = new BigInteger("18579");
+        bi2 = bi1.pow((int)ePrivateKey);
+        System.out.println("bi: " + bi2.mod(new BigInteger(Long.toString(n))));
+        System.out.println("for letter: " + message.charAt(0));
         //optional bereken private key               
     }
     
