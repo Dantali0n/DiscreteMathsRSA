@@ -46,19 +46,21 @@ public class Decrypt {
         p = entry.getKey();
         q = entry.getValue();
         ePrivateKey = FindPrimeFactors.calculatePrivateKey(e, p, q);
-        System.out.println("privaetkely: " + ePrivateKey );
+        System.out.println("private key: " + ePrivateKey );
         
         String[] letters = encryptedMessage.split(",");
         for (String letter : letters) {
+           // Convert string to BigInteger
            bi1 = new BigInteger(letter); 
-           bi2 = bi1.pow((int)ePrivateKey);
-           if(decryptMapping.containsKey(bi1)) {
-               System.out.print(decryptMapping.get(bi1));
-           }
-           else {
+           
+           // Lookup table does not contain character?
+           if(!decryptMapping.containsKey(bi1)) {
+               // Decrypt character and store in lookup table
+               bi2 = bi1.pow((int)ePrivateKey); // Calculate character to the power of ePrivateKey
                decryptMapping.put(bi1,(char)Integer.parseInt(bi2.mod(new BigInteger(Long.toString(n))).toString()));
-               System.out.print(decryptMapping.get(bi1));
            }
+           // Output characters
+           System.out.print(decryptMapping.get(bi1));
            //System.out.print("" + (char)Integer.parseInt(bi2.mod(new BigInteger(Long.toString(n))).toString()));
         }
      }
