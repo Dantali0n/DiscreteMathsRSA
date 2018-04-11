@@ -5,8 +5,7 @@ package findprimefactors;
 
 import java.io.*;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
+import javafx.util.Pair;
 
 /**
  * Finds the prime factors of an integer
@@ -31,11 +30,9 @@ public class FindPrimeFactors {
             else message = argument;
         }     
         
-        for (Map.Entry<Integer, Integer> entry : FindPQ(n).entrySet()) {
-            p = entry.getKey();
-            q = entry.getValue();
-        }
-        
+        Pair<Integer, Integer> entry = FindPQ(n); 
+        p = entry.getKey();
+        q = entry.getValue();
         e = FindE(p, q);
         
         System.out.println("p is: " + p);
@@ -59,8 +56,7 @@ public class FindPrimeFactors {
     /**
      * Find P and Q for an given N
      */
-    public static HashMap<Integer, Integer> FindPQ(long n) {
-        HashMap<Integer, Integer>  PQ = new HashMap();
+    public static Pair<Integer, Integer> FindPQ(long n) {
         int p = 0;
         int q = 0;
         int i= 2;
@@ -74,9 +70,8 @@ public class FindPrimeFactors {
                 i++;
             }
         }
-        // Put found p and q in hashmap and return
-        PQ.put(p, q);
-        return PQ;
+        // Put found p and q in pair and return
+        return new Pair<Integer, Integer>(p, q);
     }
     
     /**
