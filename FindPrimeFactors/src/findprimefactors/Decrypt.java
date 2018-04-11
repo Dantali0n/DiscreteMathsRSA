@@ -5,10 +5,13 @@
  */
 package findprimefactors;
 
-import com.sun.javafx.css.CalculatedValue;
+import static findprimefactors.FindPrimeFactors.FindPQ;
+import static findprimefactors.FindPrimeFactors.n;
+import java.util.HashMap;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Map;
+import javafx.util.Pair;
 
 /**
  *
@@ -32,32 +35,31 @@ public class Decrypt {
     //if yes we cna find privatekey by doing e * x(?) mod (p - 1)(q - 1)
     //private key is: n, x
     
-    //e =11, p = 151, q=197
-    //public static long privateKey = FindPrimeFactors.calculatePrivateKey (11, 151, 197);
+    // Giant memory inefficient lookup table
+    static HashMap<BigInteger, Character> decryptMapping = new HashMap();
     
      public static void main(String[] args) throws IOException {
-         n = 29747;
-         e = 11;
-         BigInteger bi1, bi2;
-         for (Map.Entry<Integer, Integer> entry : FindPrimeFactors.FindPQ(n).entrySet()) {
-            p = entry.getKey();
-            q = entry.getValue();
-        }
-        
-         
+        n = 29747;
+        e = 11;
+        BigInteger bi1, bi2;
+        Pair<Integer, Integer> entry = FindPQ(n); 
+        p = entry.getKey();
+        q = entry.getValue();
         ePrivateKey = FindPrimeFactors.calculatePrivateKey(e, p, q);
-     
         System.out.println("privaetkely: " + ePrivateKey );
-        
-        bi1 = new BigInteger("25039");
         
         String[] letters = encryptedMessage.split(",");
         for (String letter : letters) {
            bi1 = new BigInteger(letter); 
            bi2 = bi1.pow((int)ePrivateKey);
-           System.out.print("" + (char)Integer.parseInt(bi2.mod(new BigInteger(Long.toString(n))).toString()));
+           if(decryptMapping.containsKey(bi1)) {
+               System.out.print(decryptMapping.get(bi1));
+           }
+           else {
+               decryptMapping.put(bi1,(char)Integer.parseInt(bi2.mod(new BigInteger(Long.toString(n))).toString()));
+               System.out.print(decryptMapping.get(bi1));
+           }
+           //System.out.print("" + (char)Integer.parseInt(bi2.mod(new BigInteger(Long.toString(n))).toString()));
         }
-       
-        //System.out.println("for letter: " + message.charAt(0));
      }
 }
