@@ -33,15 +33,14 @@ public class FindPrimeFactors {
             if(n == 0) { // first argument must equal n
                 n = Long.parseLong(argument);
                 continue;
-            } 
+            }
             try { // second argument must equal e or be the sentence
                 e = Long.parseLong(argument);
-            } 
+            }
             // If argument cannot be converted to long then it is a message
             catch(NumberFormatException nfExcept) {
                 message = argument;
-            } 
-            
+            }
         }
 
 	// enter decrypting mode when e is not zero.
@@ -62,13 +61,14 @@ public class FindPrimeFactors {
 	if(!modeDecrypt) {
             System.out.println(encryptAndPrintMessage(message.toLowerCase(), e, n));
             ePrivateKey = calculatePrivateKey(e, p, q);
-            System.out.println("private key: " + p*q + ", " + ePrivateKey);
+            System.out.println("Your public key: " + n + ", " + e);
+            System.out.println("Your private key: " + n + ", " + ePrivateKey);
             System.out.println("Total time to encode: " + ((System.nanoTime() - CurrentTime) / 1000000000D));
 	}
 	else {
             Decrypt.run(n, e, message);
             System.out.println("Total time to decrypt: " + ((System.nanoTime() - CurrentTime) / 1000000000D));
-	}             
+	}
     }
 
     /**
@@ -99,24 +99,23 @@ public class FindPrimeFactors {
     public static long FindE(long p, long q) {
         long e = 0;
         long z = (p-1)*(q-1);
-        
         // loop through 1 to 14, because bigger numbers need bigger datastructure than long
         //also it doenst make much sense sich we are using static encoding(number per letter) anyway
         for(long i = 1; i < 13; i++) {
             //if zis dividible by i, then i is always the greatest common divider
-            if(z%i!=0) { 
-                
+            if(z%i!=0) {
+
                 // loop through reduced set and check for GCD start checking at 2 as 1 and 0 always work
                 boolean hasCommonDivider = false;
                 for(int j = 2; j <= i; j++) {
-                    
+
                     // If GCD has modulo 0 set hasCommonDivider and stop loop
                     if(z%j==0 && i%j==0) {
                         hasCommonDivider = true;
                         break;
                     }
                 }
-                
+
                 // dit not have commonDivider we found a possible e
                 // take large e for added complexity
                 if(!hasCommonDivider) {
@@ -126,7 +125,7 @@ public class FindPrimeFactors {
         }
         return e;
     }
-    
+
     public static String encryptAndPrintMessage(String stringToEncrypt, long publicKeye, long publicKeyN){
         System.out.print("Message after encryption is: ");
         long letterCode = 0;
@@ -137,10 +136,10 @@ public class FindPrimeFactors {
             letterEncrypted = (long) Math.pow(letterCode, publicKeye);
             letterEncrypted = letterEncrypted % publicKeyN;
             message += letterEncrypted + ", ";
-        }  
+        }
         return message;
     }
-    
+
     public static long calculatePrivateKey(long e, long p, long q){
         for(long x = 0; x<(Long.MAX_VALUE); x++){
             if(((e*x) % ((p-1)*(q-1))) == 1){

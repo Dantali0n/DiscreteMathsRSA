@@ -27,31 +27,31 @@ public class Decrypt {
     //we receive a public key and a message
     //public key has n and e
     //call findPQ with n
-    //then pq should be relative prime with given e, 
+    //then pq should be relative prime with given e,
     //else retry
     //if yes we cna find privatekey by doing e * x(?) mod (p - 1)(q - 1)
     //private key is: n, x
-    
+
     // Giant memory inefficient lookup table
     static HashMap<BigInteger, Character> decryptMapping = new HashMap();
-    
+
     public static void run(long argN, long argE, String argMessage) {
         n = argN;
         e = argE;
         encryptedMessage = argMessage;
         BigInteger bi1, bi2;
-        Pair<Integer, Integer> entry = FindPQ(n); 
+        Pair<Integer, Integer> entry = FindPQ(n);
         p = entry.getKey();
         q = entry.getValue();
         ePrivateKey = FindPrimeFactors.calculatePrivateKey(e, p, q);
         System.out.println("private key: " + ePrivateKey );
-        
+
         String[] letters = encryptedMessage.split(",");
         for (String letter : letters) {
            // Convert string to BigInteger
-           bi1 = new BigInteger(letter); 
-           
-           // Lookup table does not contain character?
+           bi1 = new BigInteger(letter);
+
+	   // Lookup table does not contain character?
            if(!decryptMapping.containsKey(bi1)) {
                // Decrypt character and store in lookup table
                bi2 = bi1.pow((int)ePrivateKey); // Calculate character to the power of ePrivateKey
