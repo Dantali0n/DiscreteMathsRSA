@@ -43,8 +43,10 @@ public class FindPrimeFactors {
         
         System.out.println(encryptAndPrintMessage(message.toLowerCase(), e, n)); 
         System.out.println("Total time to encode: " + ((System.nanoTime() - CurrentTime) / 1000000000D));
+        ePrivateKey = calculatePrivateKey(e, p, q);
         
-        // ePrivateKey = calculatePrivateKey(e, p, q);
+        System.out.println("Your public key: " + n + ", " + e);
+        System.out.println("Your private key: " + n + ", " + ePrivateKey);
         // System.out.println("privatekey: " + p*q + ", " + ePrivateKey);
         // System.out.println("\nAmount of time busy encoding was: ");
         
