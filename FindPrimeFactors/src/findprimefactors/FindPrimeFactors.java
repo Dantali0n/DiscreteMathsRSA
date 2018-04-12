@@ -4,8 +4,7 @@
 package findprimefactors;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.math.BigInteger;
 
 /** sudo apt install openjfx openjfx-source **/
 import javafx.util.Pair;
@@ -16,44 +15,62 @@ import javafx.util.Pair;
  * @author Corne Lukken
  */
 public class FindPrimeFactors {
-    static long n = 0; // p times q
     static String message = ""; // message to encrypt
+    static long n = 0; // p times q
     static long p = 0;
     static long q = 0;
     static long e = 0;
     static long ePrivateKey = 0;
-    
+
+    static boolean modeDecrypt = false;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
+       long CurrentTime = System.nanoTime();
+        BigInteger bi1, bi2;
         for(String argument : args) {
-            if(n == 0) n = Long.parseLong(argument);
-            else message = argument;
-        }     
-        
+            if(n == 0) { // first argument must equal n
+                n = Long.parseLong(argument);
+                continue;
+            } 
+            try { // second argument must equal e or be the sentence
+                e = Long.parseLong(argument);
+            } 
+            // If argument cannot be converted to long then it is a message
+            catch(NumberFormatException nfExcept) {
+                message = argument;
+            } 
+            
+        }
+
+	// enter decrypting mode when e is not zero.
+	if(e != 0) modeDecrypt = true;
+
         Pair<Integer, Integer> pq = FindPQ(n);
-        
         p = pq.getKey();
         q = pq.getValue();
-        
-        e = FindE(p, q);
-        
+
+	// If we encrypt find e otherwise it is given.
+	if(!modeDecrypt) e = FindE(p, q);
+
+        System.out.println("n is: " + n);
         System.out.println("p is: " + p);
         System.out.println("q is: " + q);
-        System.out.println("e is: " + e);      
-        
-        System.out.println(encryptAndPrintMessage(message.toLowerCase(), e, n)); 
-        
-        ePrivateKey = calculatePrivateKey(e, p, q);
-        System.out.println("privatekey: " + p*q + ", " + ePrivateKey);
-        System.out.println("\nAmount of time busy encoding was: ");
-        
-        System.out.println("first decryption of message: " + (((long)Math.pow(631, ePrivateKey) % n) % n));
+        System.out.println("e is: " + e);
 
-        //optional bereken private key               
+	if(!modeDecrypt) {
+            System.out.println(encryptAndPrintMessage(message.toLowerCase(), e, n));
+            ePrivateKey = calculatePrivateKey(e, p, q);
+            System.out.println("private key: " + p*q + ", " + ePrivateKey);
+            System.out.println("Total time to encode: " + ((System.nanoTime() - CurrentTime) / 1000000000D));
+	}
+	else {
+            Decrypt.run(n, e, message);
+            System.out.println("Total time to decrypt: " + ((System.nanoTime() - CurrentTime) / 1000000000D));
+	}             
     }
-    
+
     /**
      * Find P and Q for an given N
      */
@@ -72,11 +89,10 @@ public class FindPrimeFactors {
                 i++;
             }
         }
-        // Put found p and q in hashmap and return
-        PQ.put(p, q);
-        return PQ;
+        // Put found p and q in pair and return
+        return new Pair<Integer, Integer>(p, q);
     }
-    
+
     /**
      * Find largest e between range 1 and 14
      */
