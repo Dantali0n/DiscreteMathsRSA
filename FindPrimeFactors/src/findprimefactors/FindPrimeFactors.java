@@ -24,6 +24,7 @@ public class FindPrimeFactors {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
+       long CurrentTime = System.nanoTime();
         BigInteger bi1, bi2;
         for(String argument : args) {
             if(n == 0) n = Long.parseLong(argument);
@@ -35,22 +36,26 @@ public class FindPrimeFactors {
         q = entry.getValue();
         e = FindE(p, q);
         
+        System.out.println("n is: " + n);
         System.out.println("p is: " + p);
         System.out.println("q is: " + q);
         System.out.println("e is: " + e);      
         
         System.out.println(encryptAndPrintMessage(message.toLowerCase(), e, n)); 
+        System.out.println("Total time to encode: " + ((System.nanoTime() - CurrentTime) / 1000000000D));
         
-        ePrivateKey = calculatePrivateKey(e, p, q);
-        System.out.println("privatekey: " + p*q + ", " + ePrivateKey);
-        System.out.println("\nAmount of time busy encoding was: ");
+        // ePrivateKey = calculatePrivateKey(e, p, q);
+        // System.out.println("privatekey: " + p*q + ", " + ePrivateKey);
+        // System.out.println("\nAmount of time busy encoding was: ");
         
         
-        bi1 = new BigInteger("18579");
-        bi2 = bi1.pow((int)ePrivateKey);
-        System.out.println("bi: " + bi2.mod(new BigInteger(Long.toString(n))));
-        System.out.println("for letter: " + message.charAt(0));
+        //bi1 = new BigInteger("18579");
+        //bi2 = bi1.pow((int)ePrivateKey);
+        //System.out.println("bi: " + bi2.mod(new BigInteger(Long.toString(n))));
+        //System.out.println("for letter: " + message.charAt(0));
         //optional bereken private key               
+        
+        // Decrypt.run(n, e, message);
     }
     
     /**
