@@ -6,11 +6,9 @@
 package findprimefactors;
 
 import static findprimefactors.FindPrimeFactors.FindPQ;
-import static findprimefactors.FindPrimeFactors.n;
 import java.util.HashMap;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Map;
 import javafx.util.Pair;
 
 /**
@@ -38,9 +36,14 @@ public class Decrypt {
     // Giant memory inefficient lookup table
     static HashMap<BigInteger, Character> decryptMapping = new HashMap();
     
-     public static void main(String[] args) throws IOException {
-        n = 29747;
-        e = 11;
+    public static void run(long argN, long argE, String argMessage) {
+    //public static void main(String[] args) throws IOException {
+        // n = 29747;
+        // e = 11;
+        
+        n = argN;
+        e = argE;
+        encryptedMessage = argMessage;
         BigInteger bi1, bi2;
         Pair<Integer, Integer> entry = FindPQ(n); 
         p = entry.getKey();
@@ -63,5 +66,6 @@ public class Decrypt {
            System.out.print(decryptMapping.get(bi1));
            //System.out.print("" + (char)Integer.parseInt(bi2.mod(new BigInteger(Long.toString(n))).toString()));
         }
-     }
+        System.out.println();
+    }
 }

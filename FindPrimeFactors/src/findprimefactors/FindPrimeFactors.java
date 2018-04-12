@@ -27,8 +27,9 @@ public class FindPrimeFactors {
        long CurrentTime = System.nanoTime();
         BigInteger bi1, bi2;
         for(String argument : args) {
-            if(n == 0) n = Long.parseLong(argument);
-            else message = argument;
+            if(n == 0) n = Long.parseLong(argument); // first argument must equal n
+            if(e == 0) e = Long.parseLong(argument); // second argument must equal e
+            else message = argument; // third argument must equal message
         }     
         
         Pair<Integer, Integer> entry = FindPQ(n); 
@@ -41,8 +42,8 @@ public class FindPrimeFactors {
         System.out.println("q is: " + q);
         System.out.println("e is: " + e);      
         
-        System.out.println(encryptAndPrintMessage(message.toLowerCase(), e, n)); 
-        System.out.println("Total time to encode: " + ((System.nanoTime() - CurrentTime) / 1000000000D));
+        // System.out.println(encryptAndPrintMessage(message.toLowerCase(), e, n)); 
+        // System.out.println("Total time to encode: " + ((System.nanoTime() - CurrentTime) / 1000000000D));
         
         // ePrivateKey = calculatePrivateKey(e, p, q);
         // System.out.println("privatekey: " + p*q + ", " + ePrivateKey);
@@ -55,7 +56,8 @@ public class FindPrimeFactors {
         //System.out.println("for letter: " + message.charAt(0));
         //optional bereken private key               
         
-        // Decrypt.run(n, e, message);
+        Decrypt.run(n, e, message);
+        System.out.println("Total time to decrypt: " + ((System.nanoTime() - CurrentTime) / 1000000000D));
     }
     
     /**
