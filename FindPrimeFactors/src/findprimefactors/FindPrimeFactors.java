@@ -59,7 +59,7 @@ public class FindPrimeFactors {
         System.out.println("e is: " + e);
 
 	if(!modeDecrypt) {
-            System.out.println(encryptAndPrintMessage(message.toLowerCase(), e, n));
+            System.out.println(encryptAndPrintMessage(message, e, n));
             ePrivateKey = calculatePrivateKey(e, p, q);
             System.out.println("Your public key: " + n + ", " + e);
             System.out.println("Your private key: " + n + ", " + ePrivateKey);
@@ -128,13 +128,14 @@ public class FindPrimeFactors {
 
     public static String encryptAndPrintMessage(String stringToEncrypt, long publicKeye, long publicKeyN){
         System.out.print("Message after encryption is: ");
-        long letterCode = 0;
-        long letterEncrypted = 0;
+        BigInteger bPublicKeyN = new BigInteger(String.valueOf(publicKeyN));
+        BigInteger letterCode = new BigInteger("0");
+        BigInteger letterEncrypted = new BigInteger("0");
         String message = "";
         for (char letter : stringToEncrypt.toCharArray()) {
-            letterCode = (long)letter - 95;
-            letterEncrypted = (long) Math.pow(letterCode, publicKeye);
-            letterEncrypted = letterEncrypted % publicKeyN;
+            letterCode = new BigInteger(Integer.toString((int)letter));
+            letterEncrypted = letterCode.pow((int)publicKeye);
+            letterEncrypted = letterEncrypted.mod(bPublicKeyN);
             message += letterEncrypted + ", ";
         }
         return message;
