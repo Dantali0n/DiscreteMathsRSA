@@ -41,34 +41,49 @@ public class FindPrimeFactors {
             catch(NumberFormatException nfExcept) {
                 message = argument;
             }
-        }
-
-	// enter decrypting mode when e is not zero.
-	if(e != 0) modeDecrypt = true;
+        }        
 
         Pair<Integer, Integer> pq = FindPQ(n);
         p = pq.getKey();
         q = pq.getValue();
-
-	// If we encrypt find e otherwise it is given.
-	if(!modeDecrypt) e = FindE(p, q);
+        
+        // n is not a composite of two distinct primes!
+        // This is the most efficient way of determining that p and q are not distinct composite of N
+        // This is very efficient as it safes having to exhaust the space of n for all possible primes
+        if(p * q != n) {
+            System.err.println("P and Q are not distinct primes of N");
+            return;
+        }
+        
+        if(p == q) {
+            System.err.println("P and Q cannot be equal!");
+            return;
+        }
+        
+        if(n < 115) {
+            System.err.println("N cannot be less then 119!");
+            return;
+        }
+        
+        // enter decrypting mode when e is not zero.
+	if(e == 0) e = FindE(p, q);
 
         System.out.println("n is: " + n);
         System.out.println("p is: " + p);
         System.out.println("q is: " + q);
         System.out.println("e is: " + e);
 
-	if(!modeDecrypt) {
-            System.out.println(encryptAndPrintMessage(message, e, n));
-            ePrivateKey = calculatePrivateKey(e, p, q);
-            System.out.println("Your public key: " + n + ", " + e);
-            System.out.println("Your private key: " + n + ", " + ePrivateKey);
-            System.out.println("Total time to encode: " + ((System.nanoTime() - CurrentTime) / 1000000000D));
-	}
-	else {
-            Decrypt.run(n, e, message);
-            System.out.println("Total time to decrypt: " + ((System.nanoTime() - CurrentTime) / 1000000000D));
-	}
+        /*
+        String encMessage = encryptAndPrintMessage(message, e, n);
+        System.out.println(encMessage);
+        System.out.println("Your public key: " + n + ", " + e);
+        System.out.println("Total time to encode: " + ((System.nanoTime() - CurrentTime) / 1000000000D));
+        ePrivateKey = calculatePrivateKey(e, p, q);
+        System.out.println("Your private key: " + n + ", " + ePrivateKey);
+        */
+
+        Decrypt.run(n, e, message);
+        System.out.println("Total time to decrypt: " + ((System.nanoTime() - CurrentTime) / 1000000000D));
     }
 
     /**
@@ -89,6 +104,7 @@ public class FindPrimeFactors {
                 i++;
             }
         }
+        
         // Put found p and q in pair and return
         return new Pair<Integer, Integer>(p, q);
     }
@@ -101,9 +117,9 @@ public class FindPrimeFactors {
         long z = (p-1)*(q-1);
         // loop through 1 to 14, because bigger numbers need bigger datastructure than long
         //also it doenst make much sense sich we are using static encoding(number per letter) anyway
-        for(long i = 1; i < 13; i++) {
+        for(long i = 1; i < 181; i++) {
             //if zis dividible by i, then i is always the greatest common divider
-            if(z%i!=0) {
+            if(z%i!=0 && i != p && i != q) {
 
                 // loop through reduced set and check for GCD start checking at 2 as 1 and 0 always work
                 boolean hasCommonDivider = false;
@@ -120,6 +136,7 @@ public class FindPrimeFactors {
                 // take large e for added complexity
                 if(!hasCommonDivider) {
                     e = i;
+                    break;
                 }
             }
         }
@@ -136,7 +153,7 @@ public class FindPrimeFactors {
             letterCode = new BigInteger(Integer.toString((int)letter));
             letterEncrypted = letterCode.pow((int)publicKeye);
             letterEncrypted = letterEncrypted.mod(bPublicKeyN);
-            message += letterEncrypted + ", ";
+            message += letterEncrypted + ",";
         }
         return message;
     }

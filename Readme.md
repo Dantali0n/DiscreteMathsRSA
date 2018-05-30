@@ -2,10 +2,10 @@
 Commandline java utility encoding and decoding RSA. Build the utility using Netbeans 8.1 or 8.2, The jar file can then be found in the dist/ directory.
 
 Encryption:
-`java -jar FindPrimeFactors.jar 55 "Encrypt This!"`
+`java -jar Encrypt.jar 1651 "Encrypt This!"`
 
 Decryption:
-`java -jar FindPrimeFactors.jar 55 11 "6,15,4,19,26,28,21,-8,21,9,10,20,-8"`
+`java -jar Decrypt.jar 1651 5 "1076,1146,164,563,1622,593,493,1159,1042,1287,1171,215,89"`
 
 ```
 #Execute encrypt or decrypt based on number of arguments
