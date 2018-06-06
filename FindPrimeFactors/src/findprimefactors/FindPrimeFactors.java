@@ -60,8 +60,8 @@ public class FindPrimeFactors {
             return;
         }
         
-        if(n < 115) {
-            System.err.println("N cannot be less then 119!");
+        if(n < 122) {
+            System.err.println("n cannot be less then 122! this is because the asci values of letters use up to 122 (z), and we always do mod n");
             return;
         }
         
